@@ -202,7 +202,7 @@ class Captcha(object):
         # noinspection PyBroadException
         try:
             if os.path.isdir(self.IMAGE_PATH):
-                response = requests.get(url)
+                response = requests.get(url, verify=False)
                 content = response.content
                 with open(os.path.join(self.IMAGE_PATH, name), 'wb') as f:
                     f.write(content)

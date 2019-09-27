@@ -21,7 +21,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from captcha import Captcha
 from captcha import CrackCaptchaException
-from mails import TempMail
+from mails import TempMailApi
 from tools import get_resource_file
 
 # 根据当前文件获取当前路径
@@ -48,7 +48,7 @@ class ProcessOn(object):
         self.url = url
         self.proxy = proxy
         # 生成临时邮箱
-        self.tm = TempMail(proxy=proxy, auto=True, logger=logger)
+        self.tm = TempMailApi(proxy=proxy, logger=logger)
         self.email = self.tm.email
         self.password = ''.join(random.sample(string.ascii_letters + string.digits, 8))
         self.name = self.tm.username
@@ -73,7 +73,7 @@ class ProcessOn(object):
             # 关闭ProcessOn账号
             self.close_account()
             # 删除临时邮箱
-            self.tm.delete_email()
+            self.tm.delete_mailbox()
             return True
         except Exception:
             LOGGER.exception("邮箱[%s]注册ProcessOn时遇到异常: " % self.email)
@@ -304,10 +304,12 @@ class ProcessOn(object):
         # noinspection PyBroadException
         try:
             content = self.tm.get_mail_content(sender='ProcessOn', subject='ProcessOn验证码')
+            if not content:
+                return ''
             html = BeautifulSoup(content, 'html.parser')
-            return html.find('div', attrs={'data-x-div-type': 'body'}).find('strong', text=re.compile('\\d+')).get_text()
+            return html.find('div', attrs={'class': 'mailcontentbox'}).find('strong', text=re.compile('\\d+')).get_text()
         except Exception:
-            LOGGER.exception("")
+            LOGGER.exception("从邮件中获取验证码时遇到异常: ")
             return ''
 
 

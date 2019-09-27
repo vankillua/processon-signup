@@ -4,6 +4,7 @@
 import threading
 
 import wx
+import wx.adv
 from pubsub import pub
 
 from handler import main_process
@@ -65,6 +66,8 @@ class ProcessOnFrame(wx.Frame):
         # 设置窗口图标
         self.SetIcon(wx.Icon(self.icon, wx.BITMAP_TYPE_ICO))
 
+        self.initMenu()
+
         panel = wx.Panel(self)
 
         # 邀请链接/邀请用户数标签
@@ -124,6 +127,44 @@ class ProcessOnFrame(wx.Frame):
         # 订阅消息队列
         pub.subscribe(self.updateButtonStatus, 'update')
         pub.subscribe(self.updateLogMessage, 'log')
+
+    def initMenu(self):
+        # 菜单栏
+        menubar = wx.MenuBar()
+        # '帮助'菜单
+        help_menu = wx.Menu()
+        # '关于'菜单项
+        about_item = wx.MenuItem(help_menu, wx.ID_ABOUT, '&关于\tCtrl+A')
+        self.Bind(wx.EVT_MENU, self.onAbout, about_item)
+
+        # '退出'菜单项
+        quit_item = wx.MenuItem(help_menu, wx.ID_EXIT, '&退出\tCtrl+Q')
+        self.Bind(wx.EVT_MENU, self.onQuit, quit_item)
+
+        help_menu.Append(about_item)
+        help_menu.Append(quit_item)
+        menubar.Append(help_menu, '&帮助')
+        menubar.SetBackgroundColour('Black')
+
+        self.SetMenuBar(menubar)
+
+    def onAbout(self, event):
+        description = """
+        1. 通过代理网站获取可用代理
+        2. 通过OpenCV以及滑动算法破解滑动验证码
+        3. 通过临时邮箱进行注册以及收取邮件验证码
+        """
+        info = wx.adv.AboutDialogInfo()
+        info.SetIcon(wx.Icon(self.icon, wx.BITMAP_TYPE_ICO))
+        info.SetName('ProcessOn SignUp')
+        info.SetVersion('1.0.0')
+        info.SetDescription(description)
+        info.SetWebSite(r'https://www.processon.com')
+        info.AddDeveloper('Killua')
+        wx.adv.AboutBox(info)
+
+    def onQuit(self, event):
+        self.Close()
 
     def onSignUpClick(self, event):
         self.worker = WorkerThread(url=self.tc_link.GetValue(), numbers=int(self.ch_number.GetStringSelection()),

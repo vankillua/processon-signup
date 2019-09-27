@@ -47,4 +47,5 @@ def main_process(url, numbers=10, visual=False, logger=None):
 
 
 if __name__ == '__main__':
+    main_process(r'https://www.processon.com/i/5d4a3f49e4b0f4c23d6368ee', 1, True)
     exit(0)

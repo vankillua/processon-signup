@@ -51,6 +51,8 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(module)s - %(threadName)s - %(levelname)s - %(message)s')
 LOGGER = logging.getLogger(__name__)
 
+requests.packages.urllib3.disable_warnings()
+
 
 # 代理池
 class ProxyPool(object):
@@ -105,7 +107,7 @@ class ProxyPool(object):
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                               'Chrome/76.0.3809.100 Safari/537.36'
             }
-            res = requests.get(url, headers=headers)
+            res = requests.get(url, headers=headers, verify=False)
             content = res.text
             if res.status_code != requests.codes.ok:
                 LOGGER.error("访问地址[%s], 返回的响应状态码为: %d" % (url, int(res.status_code)))

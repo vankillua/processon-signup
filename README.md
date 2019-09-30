@@ -15,6 +15,8 @@
 
 ### 温馨提示
 1. 代理和临时邮箱都是依赖外部资源，容易由于网络问题而导致工具无法使用
-2. 临时邮箱API有时候会特别慢，甚至超时；可以到RapidAPI网站订阅这个API``https://rapidapi.com/Privatix/api/temp-mail``，但需要绑定信用卡，访问量超出时会扣费
+2. 临时邮箱API有时候会特别慢，甚至超时；可以到RapidAPI网站订阅这个API`https://rapidapi.com/Privatix/api/temp-mail`，但需要绑定信用卡，访问量超出时会扣费
 3. 破解滑动验证码并不是百分百成功，但测试过程中都能在设置的重试次数范围内破解成功
-4. 有时候点击“注册”按钮后页面没有反应，从而导致注册失败
+4. 有时候点击“立即注册”按钮后页面没有反应，实际上是因为调注册接口时返回“账号有误”，可能需要合理地创建账号才能解决
+`https://www.processon.com/signup/submit
+{"result":"error","errorcode":"error_account","msg":"账号有误"}`
